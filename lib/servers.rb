@@ -3,7 +3,7 @@ require 'helpers/file_actions'
 
 class Servers
     @@texts_new_server = ["Group name: ", "IP Address or hostname: ", "Alias name (Optional): "]
-    @@servers_array = {}
+    @@servers_array = []
 
     def add(file_name)
         args = {}
@@ -14,30 +14,60 @@ class Servers
         args['address'] = request_data(1, false)
         args['alias']   = request_data(2, true)
 
-        @@servers_array[@@servers_array.count] = Server.new(args) if save(file_name, args)
+        @@servers_array << Server.new(args) if save(file_name, args)
     end
 
     def load_servers(file_name)
         if FileActions.file_usable(file_name)
-            @@servers_array = {}
+            @@servers_array.clear
 
             file = File.new(file_name, 'r')
 
             file.each_line do |line|
-                line_array = line.split("\t")
+                line_array = line.strip.split("\t")
                 args = {}
                 args['id']      = @@servers_array.count
                 args['group']   = line_array[0]
                 args['address'] = line_array[1]
                 args['alias']   = line_array[2]
 
-                @@servers_array[@@servers_array.count] = Server.new(args)
+                @@servers_array << Server.new(args)
             end
 
             file.close
         end
 
         return @@servers_array.count
+    end
+
+    def list_servers(args=[])
+        sort_order = args.shift
+        sort_order = args.shift if sort_order == 'by'
+        sort_order = "id" unless ['id', 'status', 'group', 'alias'].include?(sort_order)
+
+        @@servers_array.sort! do |r1, r2|
+            case sort_order
+            when 'id'
+                r1.id <=> r2.id
+            when 'status'
+                r1.status <=> r2.status
+            when 'group'
+                r1.group <=> r2.group
+            when 'alias'
+                r1.alias <=> r2.alias
+            end
+        end
+
+        columns =  " ID".ljust(Config.line_tabs[:id])
+        columns << " Status".center(Config.line_tabs[:status])
+        columns << " Group".ljust(Config.line_tabs[:group])
+        columns << " Alias".ljust(Config.line_tabs[:alias])
+        columns << " Address".ljust(Config.line_tabs[:address])
+        puts columns
+
+        @@servers_array.each do |server|
+            server.show_info_line
+        end
     end
 
     private

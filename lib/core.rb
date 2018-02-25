@@ -49,9 +49,8 @@ class Core
     def do_action(action, args=[])
         case action
         when 'list'
-            # TODO: Add list method
-            #list(args)
-            puts "Listing ..."
+            output_action_header("Servers")
+            @servers_handler.list_servers(args)
         when 'find'
             # TODO: Add find method
             keyword = args.shift

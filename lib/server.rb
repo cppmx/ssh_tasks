@@ -5,23 +5,21 @@ class Server
     attr_accessor :id, :address, :alias, :group, :status
 
     def initialize(args={})
-        @id      = args[:id]      || ""
-        @address = args[:address] || ""
-        @alias   = args[:alias]   || ""
-        @group   = args[:group]   || ""
+        @id      = args["id"]      || ""
+        @address = args["address"] || ""
+        @alias   = args["alias"]   || ""
+        @group   = args["group"]   || ""
         @status  = 'UN'
     end
 
     def show_info_line
         line =  " " << @id.to_s.ljust(Config.line_tabs[:id])
-        line << " "  + @status.titleize.ljust(Config.line_tabs[:status])
-        line << " "  + @group.titleize.ljust(Config.line_tabs[:group])
-        line << " "  + @alias.titleize.ljust(Config.line_tabs[:alias])
-        line << " "  + @address.ljust(Config.line_tabs[:address])
+        line << ""  + @status.titleize.center(Config.line_tabs[:status])
+        line << ""  + @group.titleize.ljust(Config.line_tabs[:group])
+        line << ""  + @alias.titleize.ljust(Config.line_tabs[:alias])
+        line << ""  + @address.ljust(Config.line_tabs[:address])
 
         puts line
-
-        #return line
     end
 
     def show_server_info
