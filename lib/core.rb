@@ -36,11 +36,12 @@ class Core
 
         # Keep asking for user input until we get a valid action
         until Config.actions.include?(action)
-          puts "Actions: " + Config.actions.join(", ")
-          print "> "
-          user_response = gets.chomp
-          args = user_response.downcase.strip.split(' ')
-          action = args.shift
+            line = "Atcions: " + Config.actions.join(", ")
+            puts line.high_magenta
+            print " > ".high_red
+            user_response = gets.chomp
+            args = user_response.downcase.strip.split(' ')
+            action = args.shift
         end
 
         return action, args
@@ -67,9 +68,9 @@ class Core
     end
 
     def introduction
+        banner = File.read(Config.banner_file)
+        puts banner.red
         output_action_header("Welcome | Bienvenido | Bonjour".upcase)
-
-        # TODO: Create a nice interface
     end
 
     def conclusion
@@ -77,6 +78,6 @@ class Core
     end
 
     def output_action_header(text)
-        puts "\n#{text.upcase.center(Config.line_width)}\n\n"
+        puts "\n#{text.upcase.center(Config.line_width)}\n\n".yellow
     end
 end

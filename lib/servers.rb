@@ -63,7 +63,7 @@ class Servers
         columns << " Group".ljust(Config.line_tabs[:group])
         columns << " Alias".ljust(Config.line_tabs[:alias])
         columns << " Address".ljust(Config.line_tabs[:address])
-        puts columns
+        puts columns.yellow
 
         @@servers_array.each do |server|
             server.show_info_line

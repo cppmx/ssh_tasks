@@ -19,7 +19,7 @@ class Server
         line << ""  + @alias.titleize.ljust(Config.line_tabs[:alias])
         line << ""  + @address.ljust(Config.line_tabs[:address])
 
-        puts line
+        puts line.high_yellow
     end
 
     def show_server_info
