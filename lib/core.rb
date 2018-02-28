@@ -53,10 +53,9 @@ class Core
             output_action_header("Servers")
             @servers_handler.list_servers(args)
         when 'find'
-            # TODO: Add find method
+            output_action_header("Found servers")
             keyword = args.shift
-            #find(keyword)
-            puts "Finding ..."
+            @servers_handler.find(keyword)
         when 'add'
             output_action_header("Add new server")
             @servers_handler.add(Config.servers_file_name)

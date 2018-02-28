@@ -58,6 +58,29 @@ class Servers
             end
         end
 
+        list_servers_result(@@servers_array)
+    end
+
+    def find(keyword="")
+        if keyword
+            found = @@servers_array.select do |rest|
+                rest.status.downcase.include?(keyword.downcase)  ||
+                rest.group.downcase.include?(keyword.downcase)   ||
+                rest.alias.downcase.include?(keyword.downcase)   ||
+                rest.address.downcase.include?(keyword.downcase) ||
+                rest.id == keyword.to_i
+            end
+
+            list_servers_result(found)
+        else
+            puts "Find using a key phrase to search the server list."
+            puts "Examples: 'find GroupA', 'find localhost', 'find 12'\n\n"
+        end
+    end
+
+    private
+
+    def list_servers_result(array={})
         columns =  " ID".ljust(Config.line_tabs[:id])
         columns << " Status".center(Config.line_tabs[:status])
         columns << " Group".ljust(Config.line_tabs[:group])
@@ -65,12 +88,10 @@ class Servers
         columns << " Address".ljust(Config.line_tabs[:address])
         puts columns.yellow
 
-        @@servers_array.each do |server|
+        array.each do |server|
             server.show_info_line
         end
     end
-
-    private
 
     def request_data(id, can_be_null)
         user_response = ''
